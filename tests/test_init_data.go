@@ -50,7 +50,7 @@ func importSQLFile(filename, dsn string) {
 
 func main() {
 	user := flag.String("u", "root", "username of mysql")
-	passwd := flag.String("p", "123456", "password of mysql")
+	passwd := flag.String("p", "root", "password of mysql")
 	flag.Parse()
 
 	sqlFilename := "test_init_data.sql"
