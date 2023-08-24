@@ -29,6 +29,11 @@ jobs:
     - name: Try connect to MySQL
       run: |
         sudo mysql -uroot -proot
+    
+    - name: Start Redis
+      uses: supercharge/redis-github-action@1.6.0
+      with:
+        redis-port: 6379
 
     - name: start test
       run: |
