@@ -26,6 +26,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y mysql-server
         sudo service mysql start
+    - name: Try connect to MySQL
+      run: mysql -uroot -p123456
 
     - name: start test
       run: |
