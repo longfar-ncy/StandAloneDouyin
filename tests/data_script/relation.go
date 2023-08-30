@@ -61,7 +61,7 @@ func assert(err error) {
 func ShowProgress() {
 	last := time.Now()
 	idx := 0
-	for {
+	for idx < NumTotal {
 		for TotalUsers[idx].Uid == 0 {
 			time.Sleep(time.Second)
 		}
