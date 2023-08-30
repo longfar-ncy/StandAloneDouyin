@@ -3,6 +3,8 @@ package testutil
 import (
 	"database/sql"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const ROOT = "http://127.0.0.1:30000"

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"database/sql"
 	util "douyin/test/testutil"
+	"time"
 
 	"fmt"
 	"math/rand"
@@ -31,6 +33,7 @@ var (
 	MidStars   []UserInfo
 	SmallStars []UserInfo
 	Normals    []UserInfo
+	Mysql      *sql.DB
 )
 
 type UserInfo struct {
@@ -55,7 +58,27 @@ func assert(err error) {
 	}
 }
 
+func ShowProgress() {
+	idx := 0
+	for {
+		for TotalUsers[idx].Uid == 0 {
+			time.Sleep(time.Second)
+		}
+		idx++
+
+		if idx%100 == 0 {
+			fmt.Printf("Current progress: %d/%d\n", idx, NumTotal)
+		}
+	}
+}
+
 func main() {
+	var err error
+	Mysql, err = util.GetDBConnection()
+	assert(err)
+
+	go ShowProgress()
+
 	CreateNormal()
 	CreateSmallStars()
 	CreateMidStars()
@@ -83,6 +106,10 @@ func CreateSmallStars() {
 		SmallStars[i].Uid, SmallStars[i].Token, err = util.GetUseridAndToken(SmallStars[i].Name, password)
 		assert(err)
 
+		if GetFansNum(Mysql, SmallStars[i]) >= 100 {
+			continue
+		}
+
 		// add fans 100~1000
 		n := rand.Intn(900) + 100
 		fans := Sample(TotalUsers[:NumNormal], n)
@@ -91,6 +118,7 @@ func CreateSmallStars() {
 		for _, f := range fans {
 			f.Follow(SmallStars[i])
 		}
+		fans = nil
 	}
 
 	fmt.Println("create small stars successfully!")
@@ -105,6 +133,10 @@ func CreateMidStars() {
 		MidStars[i].Uid, MidStars[i].Token, err = util.GetUseridAndToken(MidStars[i].Name, password)
 		assert(err)
 
+		if GetFansNum(Mysql, MidStars[i]) >= 1000 {
+			continue
+		}
+
 		// add fans 1000~7000
 		n := rand.Intn(6000) + 1000
 		fans := Sample(TotalUsers[:NumNormal+NumSmallStar], n)
@@ -113,6 +145,7 @@ func CreateMidStars() {
 		for _, f := range fans {
 			f.Follow(MidStars[i])
 		}
+		fans = nil
 	}
 
 	fmt.Println("create mid stars successfully!")
@@ -127,6 +160,10 @@ func CreateBigStars() {
 		BigStars[i].Uid, BigStars[i].Token, err = util.GetUseridAndToken(BigStars[i].Name, password)
 		assert(err)
 
+		if GetFansNum(Mysql, BigStars[i]) >= 10000 {
+			continue
+		}
+
 		// add fans 10000~15000
 		n := rand.Intn(5000) + 10000
 		fans := Sample(TotalUsers[:NumTotal-NumBigStar], n)
@@ -135,9 +172,21 @@ func CreateBigStars() {
 		for _, f := range fans {
 			f.Follow(BigStars[i])
 		}
+		fans = nil
 	}
 
 	fmt.Println("create big stars successfully!")
+}
+
+func GetFansNum(db *sql.DB, user UserInfo) (res int) {
+	// db, err := util.GetDBConnection()
+	// assert(err)
+	row, err := db.Query(`select follower_count from user where id=?`, user.Uid)
+	assert(err)
+	defer row.Close()
+	row.Next()
+	row.Scan(&res)
+	return
 }
 
 func Sample(users []UserInfo, num int) []UserInfo {
