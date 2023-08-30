@@ -59,6 +59,7 @@ func assert(err error) {
 }
 
 func ShowProgress() {
+	last := time.Now()
 	idx := 0
 	for {
 		for TotalUsers[idx].Uid == 0 {
@@ -66,8 +67,10 @@ func ShowProgress() {
 		}
 		idx++
 
-		if idx%100 == 0 {
+		now := time.Now()
+		if now.Sub(last) > time.Second*30 {
 			fmt.Printf("Current progress: %d/%d\n", idx, NumTotal)
+			last = now
 		}
 	}
 }
