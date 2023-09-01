@@ -89,7 +89,7 @@ func FavoriteForSmallStars() {
 			n := rand.Intn(NumSmallFavorite/5) - NumSmallFavorite/10 + NumSmallFavorite
 			idxs := Sample(NumNormal, n)
 			for _, i := range idxs {
-				DoFavorite(TotalUsers[i].Token, id, SmallContent)
+				DoFavorite(TotalUsers[i].Token, id)
 			}
 		}
 	}
@@ -104,7 +104,7 @@ func FavoriteForMidStars() {
 			n := rand.Intn(NumMidFavorite/5) - NumMidFavorite/10 + NumMidFavorite
 			idxs := Sample(NumNormal+NumSmallStar, n)
 			for _, i := range idxs {
-				DoFavorite(TotalUsers[i].Token, id, MidContent)
+				DoFavorite(TotalUsers[i].Token, id)
 			}
 		}
 	}
@@ -119,7 +119,7 @@ func FavoriteForBigStars() {
 			n := rand.Intn(NumBigFavorite/5) - NumBigFavorite/10 + NumBigFavorite
 			idxs := Sample(NumNormal+NumSmallStar+NumMidStar, n)
 			for _, i := range idxs {
-				DoFavorite(TotalUsers[i].Token, id, BigContent)
+				DoFavorite(TotalUsers[i].Token, id)
 			}
 		}
 	}
