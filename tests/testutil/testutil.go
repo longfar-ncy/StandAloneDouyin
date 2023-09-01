@@ -90,3 +90,22 @@ func GetUseridAndToken(username, password string) (userid int64, token string, e
 	}
 	return respData.UserID, respData.Token, nil
 }
+
+func Login(username, password string) (id int64, token string, err error) {
+	query := map[string]string{
+		"username": username,
+		"password": password,
+	}
+	resp, err := http.Post(CreateURL("/douyin/user/login", query), "", nil)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+
+	var respData DouyinUserLoginResponse
+	respData, err = GetDouyinResponse[DouyinUserLoginResponse](resp)
+	if err != nil {
+		return
+	}
+	return respData.UserID, respData.Token, nil
+}

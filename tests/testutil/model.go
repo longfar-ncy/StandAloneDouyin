@@ -66,11 +66,11 @@ type DouyinUserResponse struct {
 	User       *UserInfo `thrift:"user,3,required" form:"user,required" json:"user,required" query:"user,required"`
 }
 
-// type DouyinPublishListResponse struct {
-// 	StatusCode int64    `thrift:"status_code,1,required" form:"status_code,required" json:"status_code,required" query:"status_code,required"`
-// 	StatusMsg  *string  `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
-// 	VideoList  []*Video `thrift:"video_list,3" form:"video_list" json:"video_list" query:"video_list"`
-// }
+type DouyinPublishListResponse struct {
+	StatusCode int64    `thrift:"status_code,1,required" form:"status_code,required" json:"status_code,required" query:"status_code,required"`
+	StatusMsg  *string  `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
+	VideoList  []*Video `thrift:"video_list,3" form:"video_list" json:"video_list" query:"video_list"`
+}
 
 type DouyinSimpleResponse struct {
 	StatusCode int64   `thrift:"status_code,1,required" form:"status_code,required" json:"status_code,required" query:"status_code,required"`
